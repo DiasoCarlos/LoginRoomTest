@@ -41,6 +41,8 @@ fun LoginScreen(
     onNewRegisterClick : () -> Unit
 ) {
 
+    val state = viewModel.state
+
     var logged by remember {
         mutableStateOf(false)
     }
@@ -86,8 +88,12 @@ fun LoginScreen(
             } else {
 
                 CustomTextField(
-                    value = "",
-                    onValueChange = {},
+                    value = state.username,
+                    onValueChange = {
+                        viewModel.onEvent(
+                            LoginEvents.UsernameChange(it)
+                        )
+                    },
                     label = "Usuario",
                     placeholder = "Usuario"
                 )
@@ -97,8 +103,12 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(20.dp))
 
             CustomTextField(
-                value = "",
-                onValueChange = {},
+                value = state.password,
+                onValueChange = {
+                    viewModel.onEvent(
+                        LoginEvents.PasswordChange(it)
+                    )
+                },
                 label = "Ingresa la contrasena",
                 placeholder = "******"
             )
