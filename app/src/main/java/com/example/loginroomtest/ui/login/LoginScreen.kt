@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.loginroomtest.R
 import com.example.loginroomtest.ui.components.CustomStypeButton
+import com.example.loginroomtest.ui.components.CustomTextField
 import com.example.loginroomtest.ui.theme.FontBlue
 import com.example.loginroomtest.ui.theme.PrimaryText
 
@@ -41,7 +42,7 @@ fun LoginScreen(
 ) {
 
     var logged by remember {
-        mutableStateOf(true)
+        mutableStateOf(false)
     }
 
     Box(
@@ -84,38 +85,22 @@ fun LoginScreen(
 
             } else {
 
-                OutlinedTextField(
-                    modifier = Modifier.fillMaxWidth(),
+                CustomTextField(
                     value = "",
                     onValueChange = {},
-                    label = {
-                        Text(text = "Usuario")
-                    },
-                    placeholder = {
-                        Text(
-                            text = "Usuario",
-                            color = Color.Gray
-                        )
-                    }
+                    label = "Usuario",
+                    placeholder = "Usuario"
                 )
 
             }
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
+            CustomTextField(
                 value = "",
                 onValueChange = {},
-                label = {
-                    Text(text = "Ingresa la contrasena")
-                },
-                placeholder = {
-                    Text(
-                        text = "Ejemplo",
-                        color = Color.Gray
-                    )
-                }
+                label = "Ingresa la contrasena",
+                placeholder = "******"
             )
 
             Spacer(modifier = Modifier.height(20.dp))

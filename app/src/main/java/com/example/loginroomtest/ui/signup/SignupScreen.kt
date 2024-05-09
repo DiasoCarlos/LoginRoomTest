@@ -27,7 +27,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.loginroomtest.ui.components.CustomDisabledTextField
 import com.example.loginroomtest.ui.components.CustomStypeButton
+import com.example.loginroomtest.ui.components.CustomTextField
+import com.example.loginroomtest.ui.components.CustomTextFieldDatePicker
 import com.example.loginroomtest.ui.theme.PrimaryTextColor
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -72,75 +75,33 @@ fun SignupScreen(
 
             if (clienteProspecto) {
 
-                OutlinedTextField(
+                CustomTextField(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 20.dp),
                     value = "",
                     onValueChange = {},
-                    label = {
-                        Text(text = "RFC")
-                    },
-                    placeholder = {
-                        Text(
-                            text = "P. ej AAAA09091000JSA",
-                            color = Color.Gray
-                        )
-                    }
+                    label = "RFC",
+                    placeholder = "P. ej AAAA09091000JSA"
                 )
 
-                OutlinedTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 20.dp)
-                        .clickable {
-
-                        },
-                    value = "",
+                CustomTextFieldDatePicker(
+                    value = "Aqui va una fecha",
+                    onClick = {},
                     onValueChange = {},
-                    label = {
-                        Text(text = "Fecha de Nacimiento")
-                    },
-                    readOnly = true,
-                    enabled = false,
-                    colors = TextFieldDefaults.textFieldColors(
-                        disabledIndicatorColor = Color.Black,
-                        containerColor = Color.Transparent,
-                        disabledTextColor = Color.Black,
-                        disabledLabelColor = Color.Black
-                    )
+                    label = "Fecha de Nacimiento"
                 )
 
-                OutlinedTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 20.dp)
-                        .clickable {
-
-                        },
+                CustomDisabledTextField(
                     value = "",
                     onValueChange = {},
-                    label = {
-                        Text(text = "Nombre(s)")
-                    },
-                    readOnly = true,
-                    enabled = false
+                    label = "Nombre(s)"
                 )
 
-                OutlinedTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 20.dp)
-                        .clickable {
-
-                        },
+                CustomDisabledTextField(
                     value = "",
                     onValueChange = {},
-                    label = {
-                        Text(text = "Apellido(s)")
-                    },
-                    readOnly = true,
-                    enabled = false
+                    label = "Apellido(s)"
                 )
 
                 CustomStypeButton(
@@ -155,72 +116,40 @@ fun SignupScreen(
 
             } else {
 
-                OutlinedTextField(
+                CustomTextField(
                     modifier = Modifier
-                        .fillMaxWidth()
                         .padding(top = 20.dp),
                     value = "",
                     onValueChange = {},
-                    label = {
-                        Text(text = "Telefono")
-                    },
-                    placeholder = {
-                        Text(
-                            text = "P. ej 5511223344",
-                            color = Color.Gray
-                        )
-                    }
+                    label = "Telefono",
+                    placeholder = "P. ej 5511223344"
                 )
 
-                OutlinedTextField(
+                CustomTextField(
                     modifier = Modifier
-                        .fillMaxWidth()
                         .padding(top = 20.dp),
                     value = "",
                     onValueChange = {},
-                    label = {
-                        Text(text = "Correo Electronico")
-                    },
-                    placeholder = {
-                        Text(
-                            text = "P. ej correo@dominio.com",
-                            color = Color.Gray
-                        )
-                    }
+                    label = "Correo Electronico",
+                    placeholder = "P. ej correo@dominio.com"
                 )
 
-                OutlinedTextField(
+                CustomTextField(
                     modifier = Modifier
-                        .fillMaxWidth()
                         .padding(top = 20.dp),
                     value = "",
                     onValueChange = {},
-                    label = {
-                        Text(text = "Contrasena")
-                    },
-                    placeholder = {
-                        Text(
-                            text = "******",
-                            color = Color.Gray
-                        )
-                    }
+                    label = "Contrasena",
+                    placeholder = "******"
                 )
 
-                OutlinedTextField(
+                CustomTextField(
                     modifier = Modifier
-                        .fillMaxWidth()
                         .padding(top = 20.dp),
                     value = "",
                     onValueChange = {},
-                    label = {
-                        Text(text = "Confirmar Contrasena")
-                    },
-                    placeholder = {
-                        Text(
-                            text = "******",
-                            color = Color.Gray
-                        )
-                    }
+                    label = "Confirmar Contrasena",
+                    placeholder = "******"
                 )
 
                 CustomStypeButton(
