@@ -11,8 +11,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface UserDao {
 
-    @Query("SELECT * FROM $USER_TABLE WHERE username = :username AND password = :password")
-    fun getUserByUsernameAndPassword(username : String, password : String) : User?
+    @Query("SELECT * FROM $USER_TABLE WHERE rfc = :rfc AND password = :password")
+    fun getUserByUsernameAndPassword(rfc : String, password : String) : User?
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     fun addUser(user: User)

@@ -9,11 +9,12 @@ data class User(
 
     @PrimaryKey(autoGenerate = true)
     val id : Long = 0,
-    val nameUser : String,
-    val username : String,
-    val firstLastName : String,
-    val secondLastName : String,
+    val rfc : String,
+    val password : String,
+    val birthDate : String,
+    val name : String,
+    val lastName : String,
     val phoneNumber : String,
-    val password : String
+    val email : String,
 
 )

@@ -42,17 +42,9 @@ class LoginViewModel @Inject constructor(
 
     }
 
-    fun insertUser(user : User) {
-
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.insertUser(user)
-        }
-
-    }
-
-    fun loginUser(username: String, password: String) {
+    fun loginUser(rfc: String, password: String) {
         viewModelScope.launch {
-            val user = repository.getUserByUsernameAndPassword(username, password)
+            val user = repository.getUserByUsernameAndPassword(rfc, password)
             _isLoggedIn.value = user != null
         }
     }

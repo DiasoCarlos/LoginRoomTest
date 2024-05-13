@@ -5,15 +5,42 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.loginroomtest.R
 
+@Composable
+fun PasswordTextField(
+    modifier: Modifier = Modifier,
+    label: String,
+    value: String,
+    placeholder: String,
+    onValueChange: (String) -> Unit
+) {
+
+    CustomTextField(
+        modifier = modifier,
+        label = label,
+        value = value,
+        placeholder = placeholder,
+        isPassword = true
+    ) {
+
+    }
+
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -22,11 +49,18 @@ fun CustomTextField(
     label: String,
     value: String,
     placeholder: String,
+    isPassword: Boolean = false,
     onValueChange: (String) -> Unit
 ) {
 
+    var hidePassword by remember {
+        mutableStateOf(true)
+    }
+
     OutlinedTextField(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(top = 10.dp),
         value = value,
         onValueChange = {
             onValueChange(it)
@@ -47,7 +81,20 @@ fun CustomTextField(
             unfocusedLabelColor = Color.Black,
             focusedLabelColor = Color.Black,
             textColor = Color.Black
-        )
+        ),
+        trailingIcon = {
+            if (isPassword) {
+
+                Icon(
+                    painter = painterResource(id = if (hidePassword) R.drawable.ic_visibility_on else R.drawable.ic_visibility_off),
+                    contentDescription = "",
+                    modifier = Modifier.clickable {
+                        hidePassword = !hidePassword
+                    }
+                )
+
+            }
+        }
     )
 
 }
@@ -64,7 +111,7 @@ fun CustomDisabledTextField(
     OutlinedTextField(
         modifier = modifier
             .fillMaxWidth()
-            .padding(top = 20.dp),
+            .padding(top = 10.dp),
         value = value,
         onValueChange = {
             onValueChange(it)
@@ -80,7 +127,7 @@ fun CustomDisabledTextField(
                 disabledBorderColor = Color.Black,
                 disabledLabelColor = Color.Black,
                 disabledTextColor = Color.Black,
-                )
+            )
     )
 
 }
@@ -98,7 +145,7 @@ fun CustomTextFieldDatePicker(
     OutlinedTextField(
         modifier = modifier
             .fillMaxWidth()
-            .padding(top = 20.dp)
+            .padding(top = 10.dp)
             .clickable {
                 onClick()
             },
@@ -141,8 +188,16 @@ private fun PreviewButtons() {
         }
         CustomDisabledTextField(
             label = "Disabled",
-            value = "Disabled") {
-            
+            value = "Disabled"
+        ) {
+
+        }
+        PasswordTextField(
+            label = "Password",
+            value = "Pepe",
+            placeholder = "***",
+        ) {
+
         }
     }
 

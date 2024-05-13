@@ -4,7 +4,7 @@ import com.example.loginroomtest.domain.model.User
 
 interface UserRepository {
 
-    fun getUserByUsernameAndPassword (username: String, password: String) : User?
+    fun getUserByUsernameAndPassword (rfc: String, password: String) : User?
 
     fun insertUser(user: User)
 

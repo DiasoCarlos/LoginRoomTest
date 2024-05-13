@@ -23,10 +23,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.loginroomtest.domain.model.User
 import com.example.loginroomtest.ui.components.CustomDisabledTextField
 import com.example.loginroomtest.ui.components.CustomStypeButton
 import com.example.loginroomtest.ui.components.CustomTextField
@@ -42,6 +44,10 @@ fun SignupScreen(
     var clienteProspecto by remember {
         mutableStateOf(true)
     }
+
+    val context = LocalContext.current
+
+    val state = viewModel.state
 
     Box(
         modifier = Modifier
@@ -79,28 +85,44 @@ fun SignupScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 20.dp),
-                    value = "",
-                    onValueChange = {},
+                    value = state.rfc,
+                    onValueChange = {
+                        viewModel.onEvent(
+                            OnSignupEvents.OnRfcChange(it)
+                        )
+                    },
                     label = "RFC",
                     placeholder = "P. ej AAAA09091000JSA"
                 )
 
                 CustomTextFieldDatePicker(
-                    value = "Aqui va una fecha",
+                    value = state.birthDate,
                     onClick = {},
-                    onValueChange = {},
+                    onValueChange = {
+                        viewModel.onEvent(
+                            OnSignupEvents.OnBirthDateChange(it)
+                        )
+                    },
                     label = "Fecha de Nacimiento"
                 )
 
                 CustomDisabledTextField(
-                    value = "",
-                    onValueChange = {},
+                    value = state.name,
+                    onValueChange = {
+                        viewModel.onEvent(
+                            OnSignupEvents.OnNameChange(it)
+                        )
+                    },
                     label = "Nombre(s)"
                 )
 
                 CustomDisabledTextField(
-                    value = "",
-                    onValueChange = {},
+                    value = state.lastName,
+                    onValueChange = {
+                        viewModel.onEvent(
+                            OnSignupEvents.OnLastNameChange(it)
+                        )
+                    },
                     label = "Apellido(s)"
                 )
 
@@ -111,7 +133,8 @@ fun SignupScreen(
                         .height(65.dp)
                         .padding(top = 20.dp)
                 ) {
-                    clienteProspecto = !clienteProspecto
+                    viewModel.validateRFC(context = context)
+                    //clienteProspecto = !clienteProspecto
                 }
 
             } else {
@@ -119,8 +142,12 @@ fun SignupScreen(
                 CustomTextField(
                     modifier = Modifier
                         .padding(top = 20.dp),
-                    value = "",
-                    onValueChange = {},
+                    value = state.phoneNumber,
+                    onValueChange = {
+                        viewModel.onEvent(
+                            OnSignupEvents.OnPhoneNumberChange(it)
+                        )
+                    },
                     label = "Telefono",
                     placeholder = "P. ej 5511223344"
                 )
@@ -128,8 +155,12 @@ fun SignupScreen(
                 CustomTextField(
                     modifier = Modifier
                         .padding(top = 20.dp),
-                    value = "",
-                    onValueChange = {},
+                    value = state.email,
+                    onValueChange = {
+                        viewModel.onEvent(
+                            OnSignupEvents.OnEmailChange(it)
+                        )
+                    },
                     label = "Correo Electronico",
                     placeholder = "P. ej correo@dominio.com"
                 )
@@ -137,8 +168,12 @@ fun SignupScreen(
                 CustomTextField(
                     modifier = Modifier
                         .padding(top = 20.dp),
-                    value = "",
-                    onValueChange = {},
+                    value = state.password,
+                    onValueChange = {
+                        viewModel.onEvent(
+                            OnSignupEvents.OnPasswordChange(it)
+                        )
+                    },
                     label = "Contrasena",
                     placeholder = "******"
                 )
@@ -146,8 +181,12 @@ fun SignupScreen(
                 CustomTextField(
                     modifier = Modifier
                         .padding(top = 20.dp),
-                    value = "",
-                    onValueChange = {},
+                    value = state.confirmPassword,
+                    onValueChange = {
+                        viewModel.onEvent(
+                            OnSignupEvents.OnConfirmPasswordChange(it)
+                        )
+                    },
                     label = "Confirmar Contrasena",
                     placeholder = "******"
                 )
@@ -159,7 +198,17 @@ fun SignupScreen(
                         .height(65.dp)
                         .padding(top = 20.dp)
                 ) {
-                    clienteProspecto = !clienteProspecto
+                    viewModel.insertUser(
+                        User(
+                            rfc = state.rfc,
+                            birthDate = state.birthDate,
+                            name = state.name,
+                            lastName = state.lastName,
+                            phoneNumber = state.phoneNumber,
+                            email = state.email,
+                            password = state.password
+                        )
+                    )
                 }
 
             }

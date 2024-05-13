@@ -9,8 +9,8 @@ class UserRepositoryImplement @Inject constructor(
     private val userDao: UserDao
 ) : UserRepository{
 
-    override fun getUserByUsernameAndPassword(username: String, password: String): User? {
-        return userDao.getUserByUsernameAndPassword(username = username, password = password)
+    override fun getUserByUsernameAndPassword(rfc: String, password: String): User? {
+        return userDao.getUserByUsernameAndPassword(rfc = rfc, password = password)
     }
 
     override fun insertUser(user: User) {
