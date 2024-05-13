@@ -31,6 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.loginroomtest.R
 import com.example.loginroomtest.ui.components.CustomStypeButton
 import com.example.loginroomtest.ui.components.CustomTextField
+import com.example.loginroomtest.ui.components.PasswordTextField
 import com.example.loginroomtest.ui.theme.FontBlue
 import com.example.loginroomtest.ui.theme.PrimaryText
 
@@ -102,7 +103,7 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            CustomTextField(
+            PasswordTextField(
                 value = state.password,
                 onValueChange = {
                     viewModel.onEvent(

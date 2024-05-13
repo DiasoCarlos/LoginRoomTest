@@ -10,5 +10,8 @@ sealed interface OnSignupEvents {
     data class OnEmailChange (val email : String) : OnSignupEvents
     data class OnPasswordChange (val password : String) : OnSignupEvents
     data class OnConfirmPasswordChange (val confirmPassword : String) : OnSignupEvents
+//    data class ValidateRFC (val rfc : String, val fechaNac : String) : OnSignupEvents
+    object ShowDatePicker : OnSignupEvents
+    object DoValidateRFC : OnSignupEvents
 
 }

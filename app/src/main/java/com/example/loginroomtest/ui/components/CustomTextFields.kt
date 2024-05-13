@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -17,6 +18,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.loginroomtest.R
@@ -37,7 +40,7 @@ fun PasswordTextField(
         placeholder = placeholder,
         isPassword = true
     ) {
-
+        onValueChange(it)
     }
 
 }
@@ -74,13 +77,14 @@ fun CustomTextField(
                 color = Color.Gray
             )
         },
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            containerColor = Color.Transparent,
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedContainerColor = Color.Transparent,
             unfocusedBorderColor = Color.Black,
             focusedBorderColor = Color.Black,
             unfocusedLabelColor = Color.Black,
             focusedLabelColor = Color.Black,
-            textColor = Color.Black
+            focusedTextColor = Color.Black,
+            unfocusedTextColor = Color.Black
         ),
         trailingIcon = {
             if (isPassword) {
@@ -94,7 +98,8 @@ fun CustomTextField(
                 )
 
             }
-        }
+        },
+        visualTransformation = if (isPassword && hidePassword) PasswordVisualTransformation() else VisualTransformation.None,
     )
 
 }

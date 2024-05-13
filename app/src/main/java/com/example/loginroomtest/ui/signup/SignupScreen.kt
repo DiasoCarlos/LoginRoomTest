@@ -1,5 +1,10 @@
 package com.example.loginroomtest.ui.signup
 
+import android.os.Build
+import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,20 +27,27 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.loginroomtest.R
 import com.example.loginroomtest.domain.model.User
 import com.example.loginroomtest.ui.components.CustomDisabledTextField
 import com.example.loginroomtest.ui.components.CustomStypeButton
 import com.example.loginroomtest.ui.components.CustomTextField
 import com.example.loginroomtest.ui.components.CustomTextFieldDatePicker
+import com.example.loginroomtest.ui.components.DatePickerWithDialog
+import com.example.loginroomtest.ui.components.PasswordTextField
 import com.example.loginroomtest.ui.theme.PrimaryTextColor
 
-@OptIn(ExperimentalMaterial3Api::class)
+@RequiresApi(Build.VERSION_CODES.O)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 fun SignupScreen(
     viewModel: SignupViewModel = hiltViewModel()
@@ -49,11 +61,45 @@ fun SignupScreen(
 
     val state = viewModel.state
 
+    if (state.doValidateRFC) {
+        if (state.rfc.isNotEmpty() && state.birthDate.isNotEmpty()) {
+            viewModel.validateRFC(rfc = state.rfc, fechaNac = state.birthDate)
+            viewModel.onEvent(
+                OnSignupEvents.DoValidateRFC
+            )
+        } else {
+            Toast.makeText(context, "Llena tu RFC y Fecha de nacimiento", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     Box(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .paint(
+                painter = painterResource(id = R.drawable.fondo_blanco_premier),
+                contentScale = ContentScale.Crop
+            ),
         contentAlignment = Alignment.BottomCenter
     ) {
+
+        DatePickerWithDialog(
+            showDialog = state.showDatePickerDialog,
+            onDismissClick = {
+                viewModel.onEvent(
+                    OnSignupEvents.ShowDatePicker
+                )
+            },
+            onBirthDateChange = {
+                viewModel.onEvent(
+                    OnSignupEvents.OnBirthDateChange(it)
+                )
+            },
+            onValidateRfc = {
+                viewModel.onEvent(
+                    OnSignupEvents.DoValidateRFC
+                )
+            }
+        )
 
         Column(
             modifier = Modifier
@@ -61,6 +107,7 @@ fun SignupScreen(
                 .padding(10.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
 
             Text(
                 text = "Crea tu cuenta",
@@ -79,136 +126,142 @@ fun SignupScreen(
                 textAlign = TextAlign.Start
             )
 
-            if (clienteProspecto) {
+            AnimatedContent(
+                targetState = !clienteProspecto,
+                label = ""
+            ) {
 
-                CustomTextField(
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 20.dp),
-                    value = state.rfc,
-                    onValueChange = {
-                        viewModel.onEvent(
-                            OnSignupEvents.OnRfcChange(it)
-                        )
-                    },
-                    label = "RFC",
-                    placeholder = "P. ej AAAA09091000JSA"
-                )
-
-                CustomTextFieldDatePicker(
-                    value = state.birthDate,
-                    onClick = {},
-                    onValueChange = {
-                        viewModel.onEvent(
-                            OnSignupEvents.OnBirthDateChange(it)
-                        )
-                    },
-                    label = "Fecha de Nacimiento"
-                )
-
-                CustomDisabledTextField(
-                    value = state.name,
-                    onValueChange = {
-                        viewModel.onEvent(
-                            OnSignupEvents.OnNameChange(it)
-                        )
-                    },
-                    label = "Nombre(s)"
-                )
-
-                CustomDisabledTextField(
-                    value = state.lastName,
-                    onValueChange = {
-                        viewModel.onEvent(
-                            OnSignupEvents.OnLastNameChange(it)
-                        )
-                    },
-                    label = "Apellido(s)"
-                )
-
-                CustomStypeButton(
-                    text = "CONTINUAR",
-                    modifier = Modifier
-                        .width(120.dp)
-                        .height(65.dp)
-                        .padding(top = 20.dp)
+                        .padding(top = 10.dp),
+                    verticalArrangement = Arrangement.spacedBy(20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    viewModel.validateRFC(context = context)
-                    //clienteProspecto = !clienteProspecto
-                }
 
-            } else {
+                    when (it) {
 
-                CustomTextField(
-                    modifier = Modifier
-                        .padding(top = 20.dp),
-                    value = state.phoneNumber,
-                    onValueChange = {
-                        viewModel.onEvent(
-                            OnSignupEvents.OnPhoneNumberChange(it)
-                        )
-                    },
-                    label = "Telefono",
-                    placeholder = "P. ej 5511223344"
-                )
+                        true -> {
 
-                CustomTextField(
-                    modifier = Modifier
-                        .padding(top = 20.dp),
-                    value = state.email,
-                    onValueChange = {
-                        viewModel.onEvent(
-                            OnSignupEvents.OnEmailChange(it)
-                        )
-                    },
-                    label = "Correo Electronico",
-                    placeholder = "P. ej correo@dominio.com"
-                )
+                            CustomTextField(
+                                modifier = Modifier,
+                                value = state.phoneNumber,
+                                onValueChange = {
+                                    viewModel.onEvent(
+                                        OnSignupEvents.OnPhoneNumberChange(it)
+                                    )
+                                },
+                                label = "Telefono",
+                                placeholder = "P. ej 5511223344"
+                            )
 
-                CustomTextField(
-                    modifier = Modifier
-                        .padding(top = 20.dp),
-                    value = state.password,
-                    onValueChange = {
-                        viewModel.onEvent(
-                            OnSignupEvents.OnPasswordChange(it)
-                        )
-                    },
-                    label = "Contrasena",
-                    placeholder = "******"
-                )
+                            CustomTextField(
+                                modifier = Modifier,
+                                value = state.email,
+                                onValueChange = {
+                                    viewModel.onEvent(
+                                        OnSignupEvents.OnEmailChange(it)
+                                    )
+                                },
+                                label = "Correo Electronico",
+                                placeholder = "P. ej correo@dominio.com"
+                            )
 
-                CustomTextField(
-                    modifier = Modifier
-                        .padding(top = 20.dp),
-                    value = state.confirmPassword,
-                    onValueChange = {
-                        viewModel.onEvent(
-                            OnSignupEvents.OnConfirmPasswordChange(it)
-                        )
-                    },
-                    label = "Confirmar Contrasena",
-                    placeholder = "******"
-                )
+                            PasswordTextField(
+                                modifier = Modifier,
+                                value = state.password,
+                                onValueChange = {
+                                    viewModel.onEvent(
+                                        OnSignupEvents.OnPasswordChange(it)
+                                    )
+                                },
+                                label = "Contrasena",
+                                placeholder = "******"
+                            )
 
-                CustomStypeButton(
-                    text = "LISTO",
-                    modifier = Modifier
-                        .width(120.dp)
-                        .height(65.dp)
-                        .padding(top = 20.dp)
-                ) {
-                    viewModel.insertUser(
-                        User(
-                            rfc = state.rfc,
-                            birthDate = state.birthDate,
-                            name = state.name,
-                            lastName = state.lastName,
-                            phoneNumber = state.phoneNumber,
-                            email = state.email,
-                            password = state.password
-                        )
-                    )
+                            PasswordTextField(
+                                modifier = Modifier,
+                                value = state.confirmPassword,
+                                onValueChange = {
+                                    viewModel.onEvent(
+                                        OnSignupEvents.OnConfirmPasswordChange(it)
+                                    )
+                                },
+                                label = "Confirmar Contrasena",
+                                placeholder = "******"
+                            )
+
+                            CustomStypeButton(
+                                text = "LISTO",
+                                modifier = Modifier
+                                    .width(120.dp)
+                                    .height(45.dp)
+                            ) {
+                                clienteProspecto = !clienteProspecto
+                            }
+
+
+                        }
+
+                        false -> {
+
+                            CustomTextField(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                value = state.rfc,
+                                onValueChange = {
+                                    viewModel.onEvent(
+                                        OnSignupEvents.OnRfcChange(it)
+                                    )
+                                },
+                                label = "RFC",
+                                placeholder = "P. ej AAAA09091000JSA"
+                            )
+
+                            CustomTextFieldDatePicker(
+                                value = state.birthDate,
+                                onClick = {
+                                    viewModel.onEvent(
+                                        OnSignupEvents.ShowDatePicker
+                                    )
+                                },
+                                onValueChange = {
+                                },
+                                label = "Fecha de Nacimiento"
+                            )
+
+                            CustomDisabledTextField(
+                                value = state.name,
+                                onValueChange = {
+                                    viewModel.onEvent(
+                                        OnSignupEvents.OnNameChange(it)
+                                    )
+                                },
+                                label = "Nombre(s)"
+                            )
+
+                            CustomDisabledTextField(
+                                value = state.lastName,
+                                onValueChange = {
+                                    viewModel.onEvent(
+                                        OnSignupEvents.OnLastNameChange(it)
+                                    )
+                                },
+                                label = "Apellido(s)"
+                            )
+
+                            CustomStypeButton(
+                                text = "CONTINUAR",
+                                modifier = Modifier
+                                    .width(120.dp)
+                                    .height(45.dp)
+                            ) {
+                                clienteProspecto = !clienteProspecto
+                            }
+
+                        }
+
+                    }
+
                 }
 
             }

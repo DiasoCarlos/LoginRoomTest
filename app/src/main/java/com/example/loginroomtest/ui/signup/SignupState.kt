@@ -8,5 +8,7 @@ data class SignupState(
     val phoneNumber : String = "",
     val email : String = "",
     val password : String = "",
-    val confirmPassword : String = ""
+    val confirmPassword : String = "",
+    val showDatePickerDialog : Boolean = false,
+    val doValidateRFC : Boolean = false,
 )
